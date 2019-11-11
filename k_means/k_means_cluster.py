@@ -8,13 +8,13 @@
 
 
 import pickle
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
 
-
+from sklearn.preprocessing import MinMaxScaler
 
 
 def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature 1", f2_name="feature 2"):
@@ -62,9 +62,19 @@ if(USE_TOTAL_PAYMENTS_FEATURE):
 else:
     features_list = [poi, feature_1, feature_2]
 
+
+
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
 
+
+'''
+Feature scaling Quiz
+'''
+scaler = MinMaxScaler()
+# Only scale salary and exercised_stock_options
+scaler.fit(np.array(np.array(finance_features))[:,0:2])
+print("200000 salary and 1m stock options are scaled to {}".format(scaler.transform([[200000,1000000]])))
 
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
